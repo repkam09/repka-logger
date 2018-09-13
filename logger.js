@@ -20,9 +20,7 @@ class RepkaNodeLogger {
         const logger = createLogger({
             level: "debug",
             format: combine(timestamp(), label({ label: textlabel }), prettyPrint()),
-            transports: [
-
-            ]
+            transports: [new transports.Console({ format: format.simple() })]
         });
 
         if (server && path) {
@@ -39,15 +37,6 @@ class RepkaNodeLogger {
 
         this.logger = logger;
         return logger;
-    }
-
-    sendRaw(object) {
-        try {
-            this.logger.log(object);
-            return true;
-        } catch (error) {
-            return false;
-        }
     }
 }
 
