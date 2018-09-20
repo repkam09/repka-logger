@@ -28,30 +28,64 @@ class RepkaNodeLogger {
         this.ssl = ssl;
     }
 
+    /**
+     * This function is a direct passthrough to the Winston logger.log( ) function call
+     * 
+     * @param {Object} settings Any settings supported by Winston
+     */
     log(settings) {
         return this.logger.log(settings);
     }
 
+
+    /**
+     * This function takes a string and logs it at verbose level
+     * @param {String} message Any log message
+     */
     verbose(message) {
         return this.logger.log({ level: "verbose", message: message });
     }
 
+    /**
+    * This function takes a string and logs it at info level
+    * @param {String} message Any log message
+    */
     info(message) {
         return this.logger.log({ level: "info", message: message });
     }
 
+    /**
+    * This function takes a string and logs it at error level
+    * @param {String} message Any log message
+    */
     error(message) {
         return this.logger.log({ level: "error", message: message });
     }
 
+    /**
+    * This function takes a string and logs it at debug level
+    * @param {String} message Any log message
+    */
     debug(message) {
         return this.logger.log({ level: "verbose", message: message });
     }
 
+    /**
+    * This function takes a string and logs it at warn level
+    * @param {String} message Any log message
+    */
     warn(message) {
         return this.logger.log({ level: "warn", message: message });
     }
 
+    /**
+    * This function takes a string prefix and uses that for subsequent log messages
+    * this will appear as part of the json data sent to the log server.
+    * 
+    * It can be used to differentiate between differnet systems by some unique id
+    * 
+    * @param {String} message Any log message
+    */
     setPrefix(prefix) {
         this.previous = this.logger;
         this.logger = null;
@@ -64,6 +98,14 @@ class RepkaNodeLogger {
     }
 }
 
+/**
+ * Helper function to create a new Winston logger from a set of parameters
+ * @param {*} server 
+ * @param {*} path 
+ * @param {*} logfile 
+ * @param {*} textlabel 
+ * @param {*} ssl 
+ */
 function createWinstonLogger(server, path, logfile, textlabel, ssl) {
     const logger = createLogger({
         level: "debug",
