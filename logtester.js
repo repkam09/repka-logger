@@ -10,6 +10,8 @@ logger.info("info");
 logger.warn("warn");
 logger.error("error");
 
+console.log(logger.version());
+
 setInterval(() => {
     const rand = getRandomInt(5);
 

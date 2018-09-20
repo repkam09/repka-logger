@@ -1,5 +1,6 @@
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
+const pkg = require("./package.json");
 
 /**
  * This class implements a generic logger on top of Winston
@@ -37,6 +38,15 @@ class RepkaNodeLogger {
         return this.logger.log(settings);
     }
 
+    version() {
+        let ver = "unknown";
+
+        if (pkg && pkg.version) {
+            ver = pkg.version;
+        }
+
+        return ver;
+    }
 
     /**
      * This function takes a string and logs it at verbose level
