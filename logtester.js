@@ -10,6 +10,10 @@ logger.info("info");
 logger.warn("warn");
 logger.error("error");
 
+logger.wrapLoggerRaw((level, message) => {
+    console.log("c:  '" + level + "' : " + message);
+});
+
 console.log(logger.version());
 
 setInterval(() => {
@@ -17,12 +21,12 @@ setInterval(() => {
 
     if (rand === 0) {
         console.log("info");
-        logger.log({ level: "info", message: "this is a test info level message" });
+        logger.info("this is a test info level message");
     }
 
     if (rand === 1) {
         console.log("warn");
-        logger.log({ level: "warn", message: "this is a test warn level message" });
+        logger.warn("this is a test warn level message");
     }
 
     if (rand === 2) {

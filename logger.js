@@ -27,6 +27,7 @@ class RepkaNodeLogger {
         this.logfile = logfile;
         this.textlabel = textlabel;
         this.ssl = ssl;
+        this.logproxyraw = false;
     }
 
     /**
@@ -53,6 +54,7 @@ class RepkaNodeLogger {
      * @param {String} message Any log message
      */
     verbose(message) {
+        proxyLog(this, message, "verbose");
         return this.logger.log({ level: "verbose", message: message });
     }
 
@@ -61,6 +63,7 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     info(message) {
+        proxyLog(this, message, "info");
         return this.logger.log({ level: "info", message: message });
     }
 
@@ -69,6 +72,7 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     error(message) {
+        proxyLog(this, message, "error");
         return this.logger.log({ level: "error", message: message });
     }
 
@@ -77,6 +81,7 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     debug(message) {
+        proxyLog(this, message, "verbose");
         return this.logger.log({ level: "verbose", message: message });
     }
 
@@ -85,6 +90,7 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     warn(message) {
+        proxyLog(this, message, "warn");
         return this.logger.log({ level: "warn", message: message });
     }
 
@@ -106,7 +112,27 @@ class RepkaNodeLogger {
             this.logger = this.previous;
         }
     }
+
+    /**
+     * 
+     * @param {function} func a function to run that takes in a level and message
+     */
+    wrapLoggerRaw(func) {
+        this.logproxyraw = func;
+    }
 }
+
+
+function proxyLog(that, message, level) {
+    if (that.logproxyraw) {
+        try {
+            that.logproxyraw(level, message);
+        } catch (err) {
+
+        }
+    }
+}
+
 
 /**
  * Helper function to create a new Winston logger from a set of parameters
