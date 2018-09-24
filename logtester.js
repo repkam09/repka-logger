@@ -4,48 +4,51 @@ console.log("Starting up log tester");
 const logger = new RLogger("log.repkam09.com", "/logger/stream", "repkadev.log", "repkadev");
 //const logger = new RLogger(null, null, "repkadev.log", "repkadev");
 
-logger.info("About to change prefix for test");
-logger.setPrefix("repkadev_initial_prefix");
-logger.info("info");
-logger.warn("warn");
-logger.error("error");
+// Grab the logger version number and print it out
+console.log("logger version: " + logger.version());
 
+
+// Test some normal logging level calls
+console.log("running normal log level tests");
+logger.info("info log message");
+logger.warn("warn log message");
+logger.error("error log message");
+logger.verbose("verbose log message");
+
+// Test the update prefix feature
+console.log("running update prefix tests");
+logger.info("info log message with original prefix");
+logger.setPrefix("repkadev_new_prefix");
+logger.info("info log message with new prefix");
+logger.setPrefix("repkadev");
+logger.info("info log message with original prefix");
+
+
+// Test some error cases, invalid calls, etc
+console.log("running error case tests");
+logger.log(null);
+logger.log("test");
+
+// Turn on the log wrapping feature
+console.log("running log wrapper prefix tests");
 logger.wrapLoggerRaw((level, message) => {
     console.log("c:  '" + level + "' : " + message);
 });
 
-console.log(logger.version());
+logger.info("This should be handled by the log wrapper as well");
 
-setInterval(() => {
-    const rand = getRandomInt(5);
+// Test log warpper function throwing an error
+logger.wrapLoggerRaw((level, message) => {
+    console.log("c:  '" + level + "' : " + message);
+    throw new Error("Some problem in the log wrapper");
+});
 
-    if (rand === 0) {
-        console.log("info");
-        logger.info("this is a test info level message");
-    }
+logger.info("This should throw an error in the log wrapper");
 
-    if (rand === 1) {
-        console.log("warn");
-        logger.warn("this is a test warn level message");
-    }
+// Turn off the log wrapping feature
+logger.wrapLoggerRaw(null);
 
-    if (rand === 2) {
-        console.log("error");
-        logger.log({ level: "error", message: "this is a test error level message" });
-    }
 
-    if (rand === 3) {
-        console.log("Changing to prefix 3");
-        logger.setPrefix("repkadev_3");
-    }
+logger.info("This should not be handled by the log wrapper ");
 
-    if (rand === 4) {
-        console.log("Changing to prefix 4");
-        logger.setPrefix("repkadev_4");
-    }
 
-}, 2000);
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
-}

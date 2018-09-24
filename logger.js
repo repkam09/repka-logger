@@ -36,7 +36,7 @@ class RepkaNodeLogger {
      * @param {Object} settings Any settings supported by Winston
      */
     log(settings) {
-        return this.logger.log(settings);
+        doLog.call(this, settings);
     }
 
     version() {
@@ -54,8 +54,8 @@ class RepkaNodeLogger {
      * @param {String} message Any log message
      */
     verbose(message) {
-        proxyLog(this, message, "verbose");
-        return this.logger.log({ level: "verbose", message: message });
+        proxyLog.call(this, message, "verbose");
+        doLog.call(this, { level: "verbose", message: message });
     }
 
     /**
@@ -63,8 +63,8 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     info(message) {
-        proxyLog(this, message, "info");
-        return this.logger.log({ level: "info", message: message });
+        proxyLog.call(this, message, "info");
+        doLog.call(this, { level: "info", message: message });
     }
 
     /**
@@ -72,8 +72,8 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     error(message) {
-        proxyLog(this, message, "error");
-        return this.logger.log({ level: "error", message: message });
+        proxyLog.call(this, message, "error");
+        doLog.call(this, { level: "error", message: message });
     }
 
     /**
@@ -81,8 +81,8 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     debug(message) {
-        proxyLog(this, message, "verbose");
-        return this.logger.log({ level: "verbose", message: message });
+        proxyLog.call(this, message, "verbose");
+        doLog.call(this, { level: "verbose", message: message });
     }
 
     /**
@@ -90,8 +90,8 @@ class RepkaNodeLogger {
     * @param {String} message Any log message
     */
     warn(message) {
-        proxyLog(this, message, "warn");
-        return this.logger.log({ level: "warn", message: message });
+        proxyLog.call(this, message, "warn");
+        doLog.call(this, { level: "warn", message: message });
     }
 
     /**
@@ -123,10 +123,23 @@ class RepkaNodeLogger {
 }
 
 
-function proxyLog(that, message, level) {
-    if (that.logproxyraw) {
+/**
+ * This function does the real logging call with error handling.
+ * @param {Object} object Settings object for Winston
+ */
+function doLog(object) {
+    try {
+        this.logger.log(object);
+    } catch (error) {
+
+    }
+}
+
+
+function proxyLog(message, level) {
+    if (this.logproxyraw) {
         try {
-            that.logproxyraw(level, message);
+            this.logproxyraw(level, message);
         } catch (err) {
 
         }
