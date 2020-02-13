@@ -16,14 +16,14 @@ class RepkaNodeLogger {
      * @param {string} textlabel a prefix label for this logger
      * @param {boolearn} ssl should ssl be used for the network logger
      */
-    constructor(server, path, logfile, textlabel = "logger", ssl = true) {
+    constructor(logfile, textlabel = "logger", ssl = true) {
 
-        const logger = createWinstonLogger(server, path, logfile, textlabel, ssl);
+        const logger = createWinstonLogger(null, null, logfile, textlabel, ssl);
 
         this.logger = logger;
 
-        this.server = server;
-        this.path = path;
+        this.server = null;
+        this.path = null;
         this.logfile = logfile;
         this.textlabel = textlabel;
         this.ssl = ssl;
@@ -37,6 +37,14 @@ class RepkaNodeLogger {
      */
     log(settings) {
         doLog.call(this, settings);
+    }
+
+    enableNetwork(server, path) {
+        this.logger = createWinstonLogger(server, path, this.logfile, this.textlabel, this.ssl);
+    }
+
+    disableNetwork() {
+        this.logger = createWinstonLogger(null, null, this.logfile, this.textlabel, this.ssl);
     }
 
     version() {

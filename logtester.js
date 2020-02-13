@@ -1,8 +1,7 @@
 const RLogger = require("./logger");
 
 console.log("Starting up log tester");
-const logger = new RLogger("log.repkam09.com", "/logger/stream", "repkadev.log", "repkadev");
-//const logger = new RLogger(null, null, "repkadev.log", "repkadev");
+const logger = new RLogger("repkadev.log", "repkadev_initial");
 
 // Grab the logger version number and print it out
 console.log("logger version: " + logger.version());
@@ -14,6 +13,15 @@ logger.info("info log message");
 logger.warn("warn log message");
 logger.error("error log message");
 logger.verbose("verbose log message");
+
+// Test enabling the network logger
+logger.enableNetwork("log.repkam09.com", "/logger/v2/stream");
+console.log("network running normal log level tests");
+logger.info("network info log message");
+logger.warn("network warn log message");
+logger.error("network error log message");
+logger.verbose("network verbose log message");
+logger.disableNetwork();
 
 // Test the update prefix feature
 console.log("running update prefix tests");
