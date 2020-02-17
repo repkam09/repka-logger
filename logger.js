@@ -117,6 +117,7 @@ class RepkaNodeLogger {
             this.logger = createWinstonLogger(this.server, this.path, this.logfile, prefix, this.ssl);
             this.previous = null;
         } catch (error) {
+            console.warn("Unable to set a new logger prefix: " + error.message);
             this.logger = this.previous;
         }
     }
